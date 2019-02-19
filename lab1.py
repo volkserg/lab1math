@@ -2,19 +2,28 @@ import PyGnuplot as gp
 # import numpy as np
 import matplotlib.pyplot as plt
 
-class Derivative:
-    def __init__(self, f, h=1E-9):
+class Derivative2:
+    def __init__(self, f, h=0.0001):
         self.f = f
         self.h = float(h)
 
     def __call__(self, x):
         f, h = self.f, self.h
-        return (f(x+h) - f(x))/h
+        return (f(x+h) - 2 * f(x) + f(x-h))/h**2
 
 
 class Task1:
 
     def __init__(self, a, b):
+        assert (a > 0 and a < 1 and b > 0 and b < 1)
+        self.a = a
+        self.b = b
+        self.inA = 1 - a
+        self. inB = 1 - b
+        self.p = self.a/self.b
+        self.delta = self.a * self.inB / (self.inA * self.b)
+
+    def reload(self, a, b):
         assert (a > 0 and a < 1 and b > 0 and b < 1)
         self.a = a
         self.b = b
@@ -80,15 +89,21 @@ class Task1:
     def calculate_qx(self):
         return (self.inB * (self.p**2)) / (self.inA * (1 - self.p))
 
-    # 13 не получилось (деление на ноль)
+    # 13
     def calculate_P(self, z):
-        return ((((z - 1) * self.inA * self.b) + z * (z - 1) * self.a * self.b) / (((z - 1) * self.inA * self.b) - z * (z - 1) * self.a * self.inB)) * self.calculate_p(0)
+        return self.calculate_p(0) * (self.inA * self.b + z * self.a * self.b) / (self.inA * self.b - z * self.a * self.inB)
 
     def calculate_VarN(self):
-        h = 0.00001
-        df = Derivative(self.calculate_P)
-
+        df = Derivative2(self.calculate_P)
         return df(1) + self.calculate_n() - self.calculate_n()**2
+
+    # 14
+    def calculate_Px(self, z):
+        return (1 - self.delta) / (1 - self.delta * z)
+
+    def calculate_VarNx(self):
+        df = Derivative2(self.calculate_Px)
+        return df(1) + self.calculate_nx() - self.calculate_nx()**2
     # 15
     def calculate_w(self):
         return (self.a * self.inB) / (self.b * (self.inA - self.inB))
@@ -97,23 +112,47 @@ class Task1:
     def calculate_v(self):
         return self.calculate_w() + 1 / self.b
 
+    # 17
+    def calculate_wz(self, z):
+        return self.calculate_px(0) + (1 - self.calculate_px(0)) * ((self.inA - self.inB) * z) / (self.inA - self.inB*z)
+
+    def calculate_Dw(self):
+        df = Derivative2(self.calculate_wz)
+        return df(1) + self.calculate_w() - self.calculate_w()**2
+    # 18
+    def calculate_fi(self, z):
+        return (self.inA - self.inB) * z / (self.inA - self.inB * z)
+
+    def calculate_Dv(self):
+        df = Derivative2(self.calculate_fi)
+        return df(1) + self.calculate_v() - self.calculate_v()**2
 # ---------------------------------3rd-----------------------------
+
 
 class Graphics():
 
-
     def draw_Na(self, a, b, dx):
-        x = []
-        y = []
+        t = Task1(a, b)
+        x1 = []
+        y1 = []
+        x2 = []
+        y2 = []
         while a < b:
-            t = Task1(a, b)
-            x.append(a)
-            y.append(t.calculate_n())
+            x1.append(a)
+            x2.append(a)
+            y1.append(t.calculate_n())
+            y2.append(t.calculate_nx())
             a += dx
-        gp.s([x, y])
-        gp.c('plot "tmp.dat" u 1:2 w lp')
-        gp.c('replot "tmp.dat" u 1:3 w lp')
+            t.reload(a, b)
+        gp.s([x1, y1], filename='tmp1.dat')
+        gp.s([x2, y2], filename='tmp2.dat')
+        gp.c('set xlabel "qweqweqwe"')
+        gp.c('set yrange [0:5]')
+        gp.c('plot "tmp1.dat" u 1:2 w i, "tmp2.dat" u 1:2 w i')
+        # gp.c('plot "tmp2.dat" u 1:2 w l 2')
         gp.p('myfigure.ps')
 
 g = Graphics()
 g.draw_Na(0.1, 0.7, 0.001)
+# t = Task1(0.3,0.4)
+# print(t.calculate_VarN())
