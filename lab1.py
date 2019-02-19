@@ -1,4 +1,4 @@
-# import PyGnuplot as gp
+import PyGnuplot as gp
 # import numpy as np
 import matplotlib.pyplot as plt
 
@@ -110,12 +110,10 @@ class Graphics():
             x.append(a)
             y.append(t.calculate_n())
             a += dx
-        plt.scatter(x, y)
-        plt.show()
-
-# t = Task1(0.1,0.5)
-# print(t.calculate_p(3))
-# print(t.calculate_VarN())
+        gp.s([x, y])
+        gp.c('plot "tmp.dat" u 1:2 w lp')
+        gp.c('replot "tmp.dat" u 1:3 w lp')
+        gp.p('myfigure.ps')
 
 g = Graphics()
 g.draw_Na(0.1, 0.7, 0.001)
