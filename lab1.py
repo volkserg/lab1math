@@ -131,7 +131,7 @@ class Task1:
 
 class Graphics():
 
-    def draw_Na(self, a, b, dx):
+    def draw_Na(self, a, b, da):
         t = Task1(a, b)
         x1 = []
         y1 = []
@@ -142,17 +142,105 @@ class Graphics():
             x2.append(a)
             y1.append(t.calculate_n())
             y2.append(t.calculate_nx())
-            a += dx
+            a += da
             t.reload(a, b)
         gp.s([x1, y1], filename='tmp1.dat')
         gp.s([x2, y2], filename='tmp2.dat')
-        gp.c('set xlabel "qweqweqwe"')
+        gp.c('set xlabel "Значение а"')
+        gp.c('set ylabel "Значение функции"')
+        gp.c('set title "Графики зависимостей показателей N и N* от значений a"')
         gp.c('set yrange [0:5]')
-        gp.c('plot "tmp1.dat" u 1:2 w i, "tmp2.dat" u 1:2 w i')
-        # gp.c('plot "tmp2.dat" u 1:2 w l 2')
-        gp.p('myfigure.ps')
+        gp.c('plot "tmp1.dat" u 1:2 w i title "N(a)", "tmp2.dat" u 1:2 w i title "N*(a)"')
+        gp.pdf("NA.pdf")
 
+    def draw_VarN(self, a, b, da):
+        t = Task1(a, b)
+        x1 = []
+        y1 = []
+        x2 = []
+        y2 = []
+        while a < b:
+            x1.append(a)
+            x2.append(a)
+            y1.append(t.calculate_VarN())
+            y2.append(t.calculate_VarNx())
+            a += da
+            t.reload(a, b)
+        gp.s([x1, y1], filename='tmp1.dat')
+        gp.s([x2, y2], filename='tmp2.dat')
+        gp.c('set xlabel "Значение а"')
+        gp.c('set ylabel "Значение функции"')
+        gp.c('set title "Графики зависимостей показателей VarN и VarN* от значений a"')
+        gp.c('set yrange [0:5]')
+        gp.c('plot "tmp1.dat" u 1:2 w i title "VarN(a)", "tmp2.dat" u 1:2 w i title "VarN*(a)"')
+        gp.pdf("VarNa.pdf")
+
+    def draw_Q(self, a, b, da):
+        t = Task1(a, b)
+        x1 = []
+        y1 = []
+        x2 = []
+        y2 = []
+        while a < b:
+            x1.append(a)
+            x2.append(a)
+            y1.append(t.calculate_q())
+            y2.append(t.calculate_qx())
+            a += da
+            t.reload(a, b)
+        gp.s([x1, y1], filename='tmp1.dat')
+        gp.s([x2, y2], filename='tmp2.dat')
+        gp.c('set xlabel "Значение а"')
+        gp.c('set ylabel "Значение функции"')
+        gp.c('set title "Графики зависимостей показателей Q и Q* от значений a"')
+        gp.c('set yrange [0:5]')
+        gp.c('plot "tmp1.dat" u 1:2 w i title "VarN(a)", "tmp2.dat" u 1:2 w i title "VarN*(a)"')
+        gp.pdf("Q.pdf")
+
+    def draw_vw(self, a, b, da):
+        t = Task1(a, b)
+        x1 = []
+        y1 = []
+        x2 = []
+        y2 = []
+        while a < b:
+            x1.append(a)
+            x2.append(a)
+            y1.append(t.calculate_w())
+            y2.append(t.calculate_v())
+            a += da
+            t.reload(a, b)
+        gp.s([x1, y1], filename='tmp1.dat')
+        gp.s([x2, y2], filename='tmp2.dat')
+        gp.c('set xlabel "Значение а"')
+        gp.c('set ylabel "Значение функции"')
+        gp.c('set title "Графики зависимостей показателей w и v от значений a"')
+        gp.c('set yrange [0:5]')
+        gp.c('plot "tmp1.dat" u 1:2 w l title "w(a)", "tmp2.dat" u 1:2 w l title "v(a)"')
+        gp.pdf("vw.pdf")
+
+    def draw_D(self, a, b, da):
+        t = Task1(a, b)
+        x1 = []
+        y1 = []
+        x2 = []
+        y2 = []
+        while a < b:
+            x1.append(a)
+            x2.append(a)
+            y1.append(t.calculate_Dw())
+            y2.append(t.calculate_Dv())
+            a += da
+            t.reload(a, b)
+        gp.s([x1, y1], filename='tmp1.dat')
+        gp.s([x2, y2], filename='tmp2.dat')
+        gp.c('set xlabel "Значение а"')
+        gp.c('set ylabel "Значение функции"')
+        gp.c('set title "Графики зависимостей показателей Dw и Dv от значений a"')
+        gp.c('set yrange [0:5]')
+        gp.c('plot "tmp1.dat" u 1:2 w l title "Dw(a)", "tmp2.dat" u 1:2 w l title "Dv(a)"')
+        gp.pdf("D.pdf")
 g = Graphics()
-g.draw_Na(0.1, 0.7, 0.001)
+g.draw_D(0.1, 0.7, 0.001)
 # t = Task1(0.3,0.4)
 # print(t.calculate_VarN())
