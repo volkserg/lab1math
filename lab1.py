@@ -49,7 +49,7 @@ class Task1:
         if i == 0:
             return p0
         elif i > 0:
-            return (1/self.b) * (self.delta ** i) * p0
+            return (1/self.inB) * (self.delta ** i) * p0
 
     # 3-4
     def calculate_px(self, i):
@@ -240,7 +240,7 @@ class Graphics():
         gp.c('set yrange [0:5]')
         gp.c('plot "tmp1.dat" u 1:2 w l title "Dw(a)", "tmp2.dat" u 1:2 w l title "Dv(a)"')
         gp.pdf("D.pdf")
-g = Graphics()
-g.draw_D(0.1, 0.7, 0.001)
+# g = Graphics()
+# g.draw_D(0.1, 0.7, 0.001)
 # t = Task1(0.3,0.4)
 # print(t.calculate_VarN())
